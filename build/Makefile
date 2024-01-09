@@ -144,6 +144,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named bin2pcd
+
+# Build rule for target.
+bin2pcd: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 bin2pcd
+.PHONY : bin2pcd
+
+# fast build rule for target.
+bin2pcd/fast:
+	$(MAKE) -f CMakeFiles/bin2pcd.dir/build.make CMakeFiles/bin2pcd.dir/build
+.PHONY : bin2pcd/fast
+
+#=============================================================================
 # Target rules for targets named lidarpoint
 
 # Build rule for target.
@@ -587,6 +600,33 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/lidarpoint.dir/build.make CMakeFiles/lidarpoint.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+src/bin2pcd.o: src/bin2pcd.cpp.o
+
+.PHONY : src/bin2pcd.o
+
+# target to build an object file
+src/bin2pcd.cpp.o:
+	$(MAKE) -f CMakeFiles/bin2pcd.dir/build.make CMakeFiles/bin2pcd.dir/src/bin2pcd.cpp.o
+.PHONY : src/bin2pcd.cpp.o
+
+src/bin2pcd.i: src/bin2pcd.cpp.i
+
+.PHONY : src/bin2pcd.i
+
+# target to preprocess a source file
+src/bin2pcd.cpp.i:
+	$(MAKE) -f CMakeFiles/bin2pcd.dir/build.make CMakeFiles/bin2pcd.dir/src/bin2pcd.cpp.i
+.PHONY : src/bin2pcd.cpp.i
+
+src/bin2pcd.s: src/bin2pcd.cpp.s
+
+.PHONY : src/bin2pcd.s
+
+# target to generate assembly for a file
+src/bin2pcd.cpp.s:
+	$(MAKE) -f CMakeFiles/bin2pcd.dir/build.make CMakeFiles/bin2pcd.dir/src/bin2pcd.cpp.s
+.PHONY : src/bin2pcd.cpp.s
+
 src/preprocess.o: src/preprocess.cpp.o
 
 .PHONY : src/preprocess.o
@@ -623,6 +663,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... package"
+	@echo "... bin2pcd"
 	@echo "... lidarpoint"
 	@echo "... ContinuousSubmit"
 	@echo "... ContinuousMemCheck"
@@ -661,6 +702,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... src/bin2pcd.o"
+	@echo "... src/bin2pcd.i"
+	@echo "... src/bin2pcd.s"
 	@echo "... src/preprocess.o"
 	@echo "... src/preprocess.i"
 	@echo "... src/preprocess.s"

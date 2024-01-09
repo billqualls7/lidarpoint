@@ -34,7 +34,8 @@ target_link_libraries(preprocess  ${PCL_LIBRARIES} ${OpenCV_LIBRARIES} ${OpenCV_
 add_executable(lidarpoint main.cpp include/colorprint.cpp )
 target_link_libraries(lidarpoint  preprocess ${PCL_LIBRARIES} ${OpenCV_LIBRARIES})
 
-
+add_executable(bin2pcd src/bin2pcd.cpp )
+target_link_libraries(bin2pcd   ${PCL_LIBRARIES} ${OpenCV_LIBRARIES})
 
 
 

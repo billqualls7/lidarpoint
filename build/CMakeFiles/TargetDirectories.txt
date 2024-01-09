@@ -1,6 +1,7 @@
 /home/rqh/wycode/lidarpoint/build/CMakeFiles/rebuild_cache.dir
 /home/rqh/wycode/lidarpoint/build/CMakeFiles/test.dir
 /home/rqh/wycode/lidarpoint/build/CMakeFiles/package.dir
+/home/rqh/wycode/lidarpoint/build/CMakeFiles/bin2pcd.dir
 /home/rqh/wycode/lidarpoint/build/CMakeFiles/lidarpoint.dir
 /home/rqh/wycode/lidarpoint/build/CMakeFiles/ContinuousSubmit.dir
 /home/rqh/wycode/lidarpoint/build/CMakeFiles/ContinuousMemCheck.dir

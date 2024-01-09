@@ -6,6 +6,12 @@
 
 #IncludeRegexTransform: 
 
+../include/colorprint.h
+iostream
+-
+string
+-
+
 ../include/preprocess.h
 iostream
 -
@@ -22,6 +28,16 @@ pcl/point_types.h
 opencv2/opencv.hpp
 -
 opencv2/imgproc.hpp
+-
+cmath
+-
+colorprint.h
+../include/colorprint.h
+algorithm
+-
+functional
+-
+vector
 -
 
 /home/rqh/wycode/lidarpoint/src/preprocess.cpp
