@@ -2,7 +2,7 @@
  * @Author: wuyao sss
  * @Date: 2024-01-05 18:58:33
  * @LastEditors: wuyao sss
- * @LastEditTime: 2024-01-09 14:38:23
+ * @LastEditTime: 2024-01-10 21:29:18
  * @FilePath: /lidarpoint/src/preprocess.cpp
  * @Description: 
  */
@@ -60,7 +60,10 @@ bool Preprocess::ReadPointCloud_pcd(const std::string& filename)
 
 }
 
-
+/**
+ * @description: 球形投影 输入xyz 
+ * @return {*}
+ */
 void Preprocess::_3Dto2D()
 {
 
@@ -89,8 +92,8 @@ void Preprocess::_3Dto2D()
         scan_z[i] = cloud_in->points[i].z;
         yaw[i] = -std::atan2(scan_y[i], scan_x[i]);
         pitch[i] = std::asin(scan_z[i] / depth[i]);
-        proj_x[i] = (0.5 * (yaw[i] / M_PI + 1.0))*proj_W;  // in [0.0, W]
-        proj_y[i] = (1.0 - (pitch[i] + fabs(fov_down)) / fov)*proj_H; // in [0.0, H]
+        proj_x[i] = (0.5 * (yaw[i] / M_PI + 1.0))*proj_W;  // in [0.0, W]   u
+        proj_y[i] = (1.0 - (pitch[i] + fabs(fov_down)) / fov)*proj_H; // in [0.0, H]  v
         
 
         proj_x[i] = std::floor(proj_x[i]);
