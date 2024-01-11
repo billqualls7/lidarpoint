@@ -2,7 +2,7 @@
  * @Author: wuyao sss
  * @Date: 2024-01-05 19:10:33
  * @LastEditors: wuyao sss
- * @LastEditTime: 2024-01-09 13:51:56
+ * @LastEditTime: 2024-01-11 15:47:14
  * @FilePath: /lidarpoint/include/preprocess.h
  * @Description: 预处理
  */
@@ -29,7 +29,8 @@
 
 
 // #define M_PI = 3.14159265358979
-
+    // proj_x = v = cols = length of the Image = 1024
+    // proj_y = u = rows = Number of Lasers of lidar = 64 
 class Preprocess
 {
 private:
@@ -43,6 +44,7 @@ private:
 
     std::vector<double> x_2d;
     std::vector<double> y_2d;
+    std::vector<std::vector<std::vector<double>>> spherical_img_;
     // pcl::PointCloud<pcl::PointXYZI>& _cloud_in;
 
 public:
@@ -60,6 +62,14 @@ public:
     
     bool ReadPointCloud_pcd(const std::string& filename);
     void _3Dto2D();
+    void GetProjection( const pcl::PointXYZI& point,
+                                const double& fov_rad,
+                                const double& fov_down_rad,
+                                int* pixel_v, int* pixel_u,
+                                double* range
+                                    );
+
+
 };
 
 

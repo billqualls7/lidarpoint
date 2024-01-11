@@ -1,3 +1,11 @@
+/*
+ * @Author: wuyao sss
+ * @Date: 2024-01-09 15:56:07
+ * @LastEditors: wuyao sss
+ * @LastEditTime: 2024-01-11 11:21:10
+ * @FilePath: /lidarpoint/src/bin2pcd.cpp
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 
 
 #include <fstream>
@@ -12,7 +20,7 @@ using namespace std;
 int main(int argc, char** argv)
 {
 	//----------------------待读取的bin文件--------------------------
-	string binFile = "/home/rqh/wycode/data/SemanticKITTI/dataset/sequences/01/velodyne/000362.bin";
+	string binFile = "/home/rqh/wycode/data/SemanticKITTI/dataset/sequences/01/velodyne/000000.bin";
 	fstream input(binFile.c_str(), ios::in | ios::binary);
 	if (!input.good()) {
 		cerr << "Could not read file: " << binFile << endl;

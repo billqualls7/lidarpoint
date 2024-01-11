@@ -17,7 +17,7 @@ int main(int, char**){
     // std::string filename  = "/home/rqh/wycode/data/SemanticKITTI/dataset/sequences/01/velodyne/";
     // filename += "000111.bin";
     Preprocess preprocess_;
-    std::string filename = "../data/forange.pcd";
+    std::string filename = "../data/000000.pcd";
     PrintColorText(filename,TextColor::Default);
     // pcl::PointCloud<pcl::PointXYZI>::Ptr cloud_in(new pcl::PointCloud<pcl::PointXYZI>);
     auto res  = preprocess_.ReadPointCloud_pcd(filename);
