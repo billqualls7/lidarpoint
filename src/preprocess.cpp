@@ -2,7 +2,7 @@
  * @Author: wuyao sss
  * @Date: 2024-01-05 18:58:33
  * @LastEditors: wuyao sss
- * @LastEditTime: 2024-01-11 16:45:05
+ * @LastEditTime: 2024-01-11 20:14:04
  * @FilePath: /lidarpoint/src/preprocess.cpp
  * @Description: 
  */
@@ -28,7 +28,13 @@ double CalculateRangeZXY(const PointInT pointIn) {
 }
 
 
-
+static double gtm() {
+    struct timeval tm;
+    gettimeofday(&tm, 0);
+    // 返回秒加上微秒的小数部分
+    double re = tm.tv_sec + (double) tm.tv_usec / 1000000.0;
+    return re;
+}
 
 bool Preprocess::ReadPointCloud_pcd(const std::string& filename)
 {   
@@ -106,24 +112,105 @@ void Preprocess::_3Dto2D()
     double fov = fabs(fov_down) + fabs(fov_up);  // get field of view total in rad
 
     spherical_img_.resize(proj_H, std::vector<std::vector<double>>((cloud_in->width * cloud_in->height),std::vector<double>(5, 0.0)));
-    double count = 0;
-    for (auto point : *cloud_in)
-    {
-        int pixel_v = 0;
-        int pixel_u = 0;
-        double range = 0.0;
-        GetProjection(point, fov, fov_down, &pixel_v, &pixel_u, &range);
+    // double count = 0;
 
+
+
+    pcl::PointCloud<pcl::PointXYZI>::Ptr cloud_out(new pcl::PointCloud<pcl::PointXYZI>);
+    std::vector<std::vector<int>> point_index_map(spherical_img_.size(), std::vector<int>(spherical_img_[0].size(), -1));
+    int index = 0;
+
+    auto tm0 = gtm();
+    // for (auto point : *cloud_in)
+    // {   
+    //     // auto tm0 = gtm();
+    //     int pixel_v = 0;
+    //     int pixel_u = 0;
+    //     double range = 0.0;
+    //     GetProjection(point, fov, fov_down, &pixel_v, &pixel_u, &range);
+
+    //     spherical_img_.at(pixel_u).at(pixel_v) = std::vector<double>{
+    //         point.x, point.y, point.z, range, point.intensity};
+
+    //     point_index_map[pixel_u][pixel_v] = index;
+    //     index++;
+    //     // count++;
+
+    // }
+
+
+    #pragma omp parallel for
+for (size_t i = 0; i < cloud_in->size(); ++i) {
+    auto point = (*cloud_in)[i];
+
+    int pixel_v = 0;
+    int pixel_u = 0;
+    double range = 0.0;
+    GetProjection(point, fov, fov_down, &pixel_v, &pixel_u, &range);
+
+    #pragma omp critical
+    {
         spherical_img_.at(pixel_u).at(pixel_v) = std::vector<double>{
             point.x, point.y, point.z, range, point.intensity};
-        
-        count++;
+
+        point_index_map[pixel_u][pixel_v] = i;
     }
+}
+
+
+
+
     auto unsort_proj = spherical_img_;
-    PrintColorText(count,TextColor::White);
+    
+    auto tm1 = gtm();
+    PrintColorText((tm1-tm0), TextColor::LightGreen);
+
     std::sort(std::begin(spherical_img_), std::end(spherical_img_), [](std::vector<std::vector<double>>& a, std::vector<std::vector<double>>& b){
     return a[0][3] > b[0][3];
 });
+
+
+
+
+
+    for (int u = 0; u < spherical_img_.size(); ++u) {
+    for (int v = 0; v < spherical_img_[u].size(); ++v) {
+        double range = spherical_img_[u][v][3];
+        if (range < 1e-6) continue;
+
+        // 获取点的索引
+        int point_index = point_index_map[u][v];
+
+        // 如果索引为 -1，则表示该位置没有点的信息
+        if (point_index == -1) continue;
+
+        // 从哈希表中获取点的坐标和强度信息
+        pcl::PointXYZI p = cloud_in->at(point_index);
+
+        pcl::PointXYZI new_point;
+        new_point.x = p.x;
+        new_point.y = p.y;
+        new_point.z = p.z;
+        new_point.intensity = p.intensity;
+
+        cloud_out->push_back(new_point);
+        }
+    }   
+
+    int64_t tm2 = gtm();
+
+    // PrintColorText((tm2-tm1), TextColor::LightGreen);
+    // pcl::visualization::PCLVisualizer viewer("PCD Viewer");
+    // viewer.setBackgroundColor(0.0, 0.0, 0.0);
+    // pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZI> color_handler(cloud_out, "intensity");
+
+    // viewer.addPointCloud<pcl::PointXYZI>(cloud_out, color_handler, "cloud");
+    // viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "cloud");
+
+    // while (!viewer.wasStopped())
+    // {
+    //     viewer.spinOnce();
+    // }
 
 
     cv::Mat sp_img(proj_H, proj_W, CV_64FC1);
@@ -150,3 +237,9 @@ void Preprocess::_3Dto2D()
 
 
 
+
+
+
+
+void Preprocess::PCL2Eigen()
+{}
