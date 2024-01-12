@@ -39,6 +39,12 @@ functional
 -
 vector
 -
+Eigen/Dense
+-
+Eigen/Core
+-
+omp.h
+-
 
 /home/rqh/wycode/lidarpoint/src/preprocess.cpp
 preprocess.h

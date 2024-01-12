@@ -2,7 +2,7 @@
  * @Author: wuyao sss
  * @Date: 2024-01-05 19:10:33
  * @LastEditors: wuyao sss
- * @LastEditTime: 2024-01-11 20:09:54
+ * @LastEditTime: 2024-01-12 21:04:15
  * @FilePath: /lidarpoint/include/preprocess.h
  * @Description: 预处理
  */
@@ -23,6 +23,10 @@
 #include <algorithm>
 #include <functional>
 #include <vector>
+#include <Eigen/Dense>
+#include <Eigen/Core>
+#include <omp.h>
+
 //=============include===================================================
 
 
@@ -44,9 +48,16 @@ private:
 
     std::vector<double> x_2d;
     std::vector<double> y_2d;
-    std::vector<std::vector<std::vector<double>>> spherical_img_;
+    std::vector<std::vector<std::vector<float>>> spherical_img_; 
     // pcl::PointCloud<pcl::PointXYZI>& _cloud_in;
 
+    void Calculate( Eigen::MatrixXf xyzi,
+                    const double& fov_rad,
+                    const double& fov_down_rad,
+                    Eigen::VectorXi* pixel_v, Eigen::VectorXi* pixel_u, Eigen::VectorXf* range);
+    
+    void PCL2Eigen(const pcl::PointCloud<pcl::PointXYZI>::Ptr& points_in, 
+                        Eigen::MatrixXf* xyzi);
 public:
     Preprocess(/* args */){
         x_2d.resize(proj_W);
